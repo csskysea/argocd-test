@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myalpine
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: myalpine
+  template:
+    metadata:
+      labels:
+        app: myalpine
+    spec:
+      containers:
+      - name: myalpine
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+      hostAliases: 
+      - ip: "172.20.0.1"
+        hostnames:
+        - "harbor.csskyea.ai"
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myalpine
+  namespace: default
+spec:
+  sessionAffinity: ClientIP
+  selector:
+    app: myalpine
+  ports:
+  - port: 80
+    targetPort: 80
+    
+
