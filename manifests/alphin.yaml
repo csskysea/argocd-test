@@ -12,6 +12,7 @@ spec:
       labels:
         app: myalpine
     spec:
+      replicas: 3
       containers:
       - name: myalpine
         image: nginx
